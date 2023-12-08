@@ -26,7 +26,7 @@ const Login = () => {
                 (response.data.code === 200) {
                 // Handle successful response, e.g., show success message
                 message.success("Login Succeeded");
-                sessionStorage.setItem('token', response.data.token);
+                sessionStorage.setItem('token', response.data.data.token);
                 navigate('/');
                 window.location.reload();
             } else {

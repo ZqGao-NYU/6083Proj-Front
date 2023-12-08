@@ -9,7 +9,9 @@ import SetOrder from "./components/SetOrder/SetOrder";
 import React from "react";
 import NavBar from "./components/NavBar/NavBar";
 import Footer from "./components/Footer/Footer";
-import Main from 'components/Main/Main';
+import Main from './components/Main/Main';
+import MyOrder from "./components/MyOrder/MyOrder";
+import MyOrderDetail from "./components/MyOrder/MyOrderDetail";
 
 function App() {
     const [primary, setPrimary] = React.useState('#520396');
@@ -35,6 +37,8 @@ function App() {
                   <Route path="/login" element={<Login/>} />
                   <Route path="/reset" element={<Reset/>} />
                   <Route path="/set-order" element={<SetOrder/>} />
+                  <Route path="/my-order" element={<MyOrder/>} />
+                  <Route path="/my-order-detail/:orderId" element={<MyOrderDetail />} />
               </Routes>
               <Footer/>
           </ConfigProvider>

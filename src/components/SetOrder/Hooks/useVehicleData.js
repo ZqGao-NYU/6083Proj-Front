@@ -8,7 +8,6 @@ export function useVehicleData() {
     const fetchData = async (formData) => {
         setLoadingVehicle(true);
         setShowResult(true);
-        console.log(formData);
         try {
             const response = await submitVehicleSearch(formData);
             setVehicleList(response.data);

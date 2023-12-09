@@ -12,41 +12,43 @@ import Footer from "./components/Footer/Footer";
 import Main from './components/Main/Main';
 import MyOrder from "./components/MyOrder/MyOrder";
 import MyOrderDetail from "./components/MyOrder/MyOrderDetail";
+import ReserveVehicle from "./components/SetOrder/ReserveVehicle";
 
 function App() {
     const [primary, setPrimary] = React.useState('#520396');
-  return (
-      <div>
-          <ConfigProvider
-              theme={{
-                  token: {
-                      colorPrimary: primary,
-                  },
-              }}
-          >
+    return (
+        <div>
+            <ConfigProvider
+                theme={{
+                    token: {
+                        colorPrimary: primary,
+                    },
+                    components: {
+                        Card: {
+                            headerFontSize: 20,
+                            headerFontSizeSM: 18,
+                        }
+                    }
+                }}
+            >
+                <NavBar/>
+                <Routes>
+                    <Route path="/" element={<Main/>}/>
+                    <Route path="/register" element={<Register/>}/>
+                    <Route path="/login" element={<Login/>}/>
+                    <Route path="/reset" element={<Reset/>}/>
+                    <Route path="/set-order" element={<SetOrder/>}/>
+                    <Route path="/my-order" element={<MyOrder/>}/>
+                    <Route path="/my-order-detail/:orderId" element={<MyOrderDetail/>}/>
+                    <Route path="/set-order/reserve-vehicle/check-out/:vehicleID:startTime:endTime" element={<ReserveVehicle/>}/>
+                </Routes>
+                <Footer/>
+            </ConfigProvider>
 
-              {/*<Space>*/}
-              {/*    <Input placeholder="Please Input" />*/}
-              {/*    <Button type="primary">Submit</Button>*/}
-              {/*</Space>*/}
-              <NavBar/>
-              <Routes>
-                
-              <Route path="/" element={<Main/>} />
-                  <Route path="/register" element={<Register/>} />
-                  <Route path="/login" element={<Login/>} />
-                  <Route path="/reset" element={<Reset/>} />
-                  <Route path="/set-order" element={<SetOrder/>} />
-                  <Route path="/my-order" element={<MyOrder/>} />
-                  <Route path="/my-order-detail/:orderId" element={<MyOrderDetail />} />
-              </Routes>
-              <Footer/>
-          </ConfigProvider>
-
-      </div>
+        </div>
 
 
-  );
+    );
 }
 
 export default App;

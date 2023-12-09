@@ -4,6 +4,7 @@ import {DatePicker} from "antd";
 import dayjs from "dayjs";
 import './SetOrderStyle.css';
 import {useFetchVehicleList} from "./Hooks/useFetchOfficeList";
+import {SearchDataContext} from "./SetOrder";
 const {Option} = Select;
 
 const {RangePicker} = DatePicker;
@@ -33,6 +34,8 @@ const RentForm = ({fetchData}) => {
 
     const [useDiffLoc, setUseDiffLoc] = React.useState(false);
     const {addressList, loadingAddress} = useFetchVehicleList();
+    const {searchData, setSearchData} = React.useContext(SearchDataContext);
+
 
     const items = [
         {
@@ -51,11 +54,17 @@ const RentForm = ({fetchData}) => {
                     placeholder={`Select your pick up  address`}
                     loading={loadingAddress}
                     disabled={loadingAddress}
+                    labelInValue={true}
+
+
                 >
                     {addressList.map((option, index) => {
                         const address = option?.address?.street + ' '
                             + option?.address?.city + ' ' + option?.address?.state + ' ' + option?.address?.zipCode;
-                        return <Option value={option.officeID} key={index}>{address}</Option>
+                        return <Option
+                            value={option.officeID} key={index}
+                        >{address}
+                        </Option>
                         }
                     )}
 
@@ -63,7 +72,7 @@ const RentForm = ({fetchData}) => {
             )
         },
         {
-            name: ['rent', 'rentRange'],
+            name: 'rentRange',
             label: '',
             colon: false,
             rules: [
@@ -108,7 +117,17 @@ const RentForm = ({fetchData}) => {
     }
 
     const onFinish = () => {
+        // setSearchData({
+        //     ...searchData,
+        //     ...form.getFieldValue(['rent', 'rentRange'])
+        //
+        // })
         form.validateFields().then((values) => {
+            setSearchData(values);
+            values = {
+                ...values,
+                officeID: values?.officeID?.value,
+            }
             fetchData(values);
         }).catch((info) => {
         });
@@ -122,7 +141,7 @@ const RentForm = ({fetchData}) => {
                 form={form}
                 {...layout}
                 name="rental-form"
-                onFinish={searchVehicles}
+                // onFinish={searchVehicles}
             >
                 {items.map((item, index) => {
                     const shouldRender = item.shouldRender ? item.shouldRender(useDiffLoc) : true;

@@ -4,6 +4,21 @@
   max-width: 95vh;
 }
 
+.vehicleDisplayCase .vehicle-item {
+  background-color: #ffffff;
+  cursor: pointer;
+  border: 1px solid #ffffff;
+  padding-right: 15px;
+  padding-top: 15px;
+  height: 170px;
+  &:hover {
+    /*background-color: #efefef;*/
+    border-color: #7b10dc;
+    /*text-shadow: 0 0 1px #7b10dc;*/
+  }
+
+}
+
 .vehicleDisplayCase img {
   width: 215px;
   max-height: 150px;
@@ -40,3 +55,7 @@
   padding-right: 0;
 }
 
+
+.vehicle-reserve-card span {
+  font-size: 16px;
+}

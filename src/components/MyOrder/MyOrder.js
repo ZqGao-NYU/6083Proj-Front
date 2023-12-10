@@ -30,6 +30,7 @@ const MyOrder = () => {
                 if
                 (response.data.code === 200) {
                     // Handle successful response, e.g., show success message
+                    console.log(response);
                     setOrders(response.data.data);
                 } else {
                     message.error(response.data.message);

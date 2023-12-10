@@ -13,6 +13,7 @@ const VehicleDisplayCase = ({vehicleList, vehicleLoading}) => {
         setOpenReserveModal(true);
         setSelectedVehicle(vehicle);
     }
+
     return (
         <React.StrictMode>
             <div className="vehicleDisplayCase">

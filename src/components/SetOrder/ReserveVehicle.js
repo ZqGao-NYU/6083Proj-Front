@@ -1,29 +1,59 @@
 import React, {useEffect} from 'react';
-import {Button, Card, Divider, Flex, List, Modal,} from "antd";
+import {Button, Card, Divider, Flex, List, message, Modal,} from "antd";
 import {ExclamationCircleOutlined} from "@ant-design/icons";
 import {rentalPolicy} from "static/textContent";
 import {SearchDataContext} from "./SetOrder";
 import {useNavigate} from "react-router-dom";
+import VehicleInfoCard from "./component/VehicleInfoCard";
+import {reserveVehicle} from "api/SetOrderAPI";
 // import {useParams} from 'react-router-dom';
 
 
-const svgStyle = {
-    width: 13,
-    height: 13
-}
+
 
 
 const ReserveVehicle = ({openReserveModal, setOpenReserveModal, selectedVehicle}) => {
     // const {vehicleID} = useParams();
     const {searchData, setSearchData} = React.useContext(SearchDataContext);
     const navigate = useNavigate();
-
+    const [isReserving, setIsReserving] = React.useState(false);
 
     const handleCancel = () => {
         setOpenReserveModal(false);
     }
     const handleReserve = () => {
-        navigate(`/set-order/reserve-vehicle/check-out/${selectedVehicle.vehicleID}/${searchData.rentRange[0].format('YYYY-MM-DD HH')}/${searchData.rentRange[1].format('YYYY-MM-DD HH')}`);
+        // navigate(`/set-order/reserve-vehicle/check-out/
+        // ${selectedVehicle.vehicleID}/${searchData.rentRange[0].format('YYYY-MM-DD HH')}/${searchData.rentRange[1].format('YYYY-MM-DD HH')}/
+        // ${(selectedVehicle.dailyRate * Math.round(searchData.rentRange[1].diff(searchData.rentRange[0], 'day', true)) * 1.1).toFixed(2)}/
+        // ${encodeURIComponent(selectedVehicle.imgUrl)}/
+        // ${selectedVehicle.make}/
+        // ${selectedVehicle.type}/
+        // ${selectedVehicle.dailyRate}/
+        // ${selectedVehicle.overMileFee}/
+        // ${searchData.officeID.label}/
+        // ${searchData.officeID.officeID}`);
+        setIsReserving(true);
+        const token = sessionStorage.getItem('token');
+        const formData = {
+            vehicleID: selectedVehicle.vehicleID,
+            startTime: searchData.rentRange[0].format('YYYY-MM-DDTHH:MM:ss'),
+            endTime: searchData.rentRange[1].format('YYYY-MM-DDTHH:MM:ss'),
+            customerID: 0,
+            pickupAddressID: searchData.officeID.value,
+            dropoffAddressID: searchData.officeID.value
+
+        }
+        console.log(searchData);
+        reserveVehicle(formData, token).then(res => {
+            message.success('Reserve Successfully');
+            handleCancel();
+            setIsReserving(false);
+        }).catch(err => {
+            message.error('Reserve Failed');
+            setIsReserving(false);
+
+        })
+
     }
     const {rentRange, officeID} = searchData;
     const timeDiff = rentRange && Math.round(rentRange[1].diff(rentRange[0], 'day', true));
@@ -35,7 +65,7 @@ const ReserveVehicle = ({openReserveModal, setOpenReserveModal, selectedVehicle}
                    <Button key="back" onClick={handleCancel}>
                        Cancel
                    </Button>,
-                   <Button key="Reserve" type="primary" onClick={handleReserve}>
+                   <Button key="Reserve" type="primary" onClick={handleReserve} loading={isReserving}>
                        Reserve
                    </Button>,
 
@@ -44,37 +74,7 @@ const ReserveVehicle = ({openReserveModal, setOpenReserveModal, selectedVehicle}
             <h1>Reserve Vehicle</h1>
             {openReserveModal && selectedVehicle && (
                 <Flex vertical={true}>
-                    <Card
-                        bordered={false}
-                        className="vehicle-reserve-card"
-                    >
-                        <Card.Meta
-                            avatar={<img src={selectedVehicle.imgUrl} alt=""/>}
-                            title={
-                                <Flex justify="space-between">
-                                    <span>{selectedVehicle.make}</span>
-                                    <span>${selectedVehicle.dailyRate}/day</span>
-                                </Flex>
-                            }
-                            description={(<>
-                                <Flex vertical={true} justify="space-evenly" gap="large">
-                                    <Flex justify="space-between">
-                                        <span>{selectedVehicle.type}</span>
-                                        <span><ExclamationCircleOutlined/>${selectedVehicle.overMileFee}/mile over 500 miles</span>
-                                    </Flex>
-                                    <Flex justify="space-evenly">
-                                        <span><img src="/SetOrder/seat-pictogram-2-svgrepo-com.svg" alt=""
-                                                   style={svgStyle}/>Seats 5</span>
-                                        <span><img src="/SetOrder/car-door-svgrepo-com.svg" alt="" style={svgStyle}/>Doors 4</span>
-                                        <span><img src="/SetOrder/trunk-svgrepo-com.svg" alt="" style={svgStyle}/>Large Bags 1</span>
-                                        <span><img src="/SetOrder/gear-svgrepo-com.svg" alt=""
-                                                   style={svgStyle}/>Auto</span>
-                                    </Flex>
-
-                                </Flex>
-                            </>)}
-                        />
-                    </Card>
+                    <VehicleInfoCard selectedVehicle={selectedVehicle}/>
                     <h2>Reservation Details</h2>
                     {rentRange && officeID && (
                         <Flex vertical={true} gap="large">
@@ -118,7 +118,7 @@ const ReserveVehicle = ({openReserveModal, setOpenReserveModal, selectedVehicle}
                     <Divider/>
                     <Flex justify="space-between">
                         <span><strong>Total</strong></span>
-                        <span><strong>${selectedVehicle.dailyRate * timeDiff * 1.1}</strong></span>
+                        <span><strong>${(selectedVehicle.dailyRate * timeDiff * 1.1).toFixed(2)}</strong></span>
                     </Flex>
                 </Flex>
             )}

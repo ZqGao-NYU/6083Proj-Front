@@ -13,6 +13,7 @@ import Main from './components/Main/Main';
 import MyOrder from "./components/MyOrder/MyOrder";
 import MyOrderDetail from "./components/MyOrder/MyOrderDetail";
 import ReserveVehicle from "./components/SetOrder/ReserveVehicle";
+import Checkout from "./components/SetOrder/Checkout";
 
 function App() {
     const [primary, setPrimary] = React.useState('#520396');
@@ -40,7 +41,8 @@ function App() {
                     <Route path="/set-order" element={<SetOrder/>}/>
                     <Route path="/my-order" element={<MyOrder/>}/>
                     <Route path="/my-order-detail/:orderId" element={<MyOrderDetail/>}/>
-                    <Route path="/set-order/reserve-vehicle/check-out/:vehicleID:startTime:endTime" element={<ReserveVehicle/>}/>
+                    <Route path="/set-order/reserve-vehicle/check-out/:vehicleID/:startTime/:endTime/:totalPrice/:imgUrl/:make/:type/:dailyRate/:overMileFee/:officeLabel/:officeID"
+                           element={<Checkout/>}/>
                 </Routes>
                 <Footer/>
             </ConfigProvider>

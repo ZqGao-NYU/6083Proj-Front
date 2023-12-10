@@ -38,3 +38,34 @@ export const getOfficeList = () => {
         });
     }
 }
+
+export const reserveVehicle = (formData, token) => {
+    if (useMock === true) {
+        // return new Promise(resolve => {
+        //     setTimeout(() => {
+        //         resolve(1);
+        //     }, 5000);
+        // })
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                reject("conflict");
+            }, 1000);
+        })
+    } else {
+        console.log(token);
+        const url = `vehicle/reserve?vehicleID=${formData.vehicleID}&customerID=1&startDate=${encodeURIComponent(formData.startTime)}&endDate=${encodeURIComponent(formData.endTime)}&pickupAddressID=${formData.pickupAddressID}&dropoffAddressID=${formData.dropoffAddressID}`;
+        return api.post(url, formData, {
+            baseURL: 'http://localhost:8080/api/v1/set-order',
+            headers: {
+                'Content-Type': 'application/json',
+                'Token': token
+            }
+        }).then(response => {
+            console.log(response);
+            return Promise.resolve(response.data);
+        }).catch(error => {
+            console.log(error);
+            return Promise.reject(error);
+        });
+    }
+}

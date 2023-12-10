@@ -1,3 +1,7 @@
+export let fetchUsualPayment = {
+    "code": 200,
+    "message": "success",
+}
 export const fetchVehicleList = {
     "code": 200,
     "message": "success",
@@ -116,3 +120,8 @@ export const fetchOfficeList = {
     ]
 }
 
+export const fetchCoupon = {
+    "code": 200,
+    "message": "success",
+    "data": 32.5
+}

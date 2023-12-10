@@ -22,37 +22,37 @@ const ReserveVehicle = ({openReserveModal, setOpenReserveModal, selectedVehicle}
         setOpenReserveModal(false);
     }
     const handleReserve = () => {
-        // navigate(`/set-order/reserve-vehicle/check-out/
-        // ${selectedVehicle.vehicleID}/${searchData.rentRange[0].format('YYYY-MM-DD HH')}/${searchData.rentRange[1].format('YYYY-MM-DD HH')}/
-        // ${(selectedVehicle.dailyRate * Math.round(searchData.rentRange[1].diff(searchData.rentRange[0], 'day', true)) * 1.1).toFixed(2)}/
-        // ${encodeURIComponent(selectedVehicle.imgUrl)}/
-        // ${selectedVehicle.make}/
-        // ${selectedVehicle.type}/
-        // ${selectedVehicle.dailyRate}/
-        // ${selectedVehicle.overMileFee}/
-        // ${searchData.officeID.label}/
-        // ${searchData.officeID.officeID}`);
-        setIsReserving(true);
-        const token = sessionStorage.getItem('token');
-        const formData = {
-            vehicleID: selectedVehicle.vehicleID,
-            startTime: searchData.rentRange[0].format('YYYY-MM-DDTHH:MM:ss'),
-            endTime: searchData.rentRange[1].format('YYYY-MM-DDTHH:MM:ss'),
-            customerID: 0,
-            pickupAddressID: searchData.officeID.value,
-            dropoffAddressID: searchData.officeID.value
-
-        }
-        console.log(searchData);
-        reserveVehicle(formData, token).then(res => {
-            message.success('Reserve Successfully');
-            handleCancel();
-            setIsReserving(false);
-        }).catch(err => {
-            message.error('Reserve Failed');
-            setIsReserving(false);
-
-        })
+        navigate(`/set-order/reserve-vehicle/check-out/
+        ${selectedVehicle.vehicleID}/${searchData.rentRange[0].format('YYYY-MM-DD HH')}/${searchData.rentRange[1].format('YYYY-MM-DD HH')}/
+        ${(selectedVehicle.dailyRate * Math.round(searchData.rentRange[1].diff(searchData.rentRange[0], 'day', true)) * 1.1).toFixed(2)}/
+        ${encodeURIComponent(selectedVehicle.imgUrl)}/
+        ${selectedVehicle.make}/
+        ${selectedVehicle.type}/
+        ${selectedVehicle.dailyRate}/
+        ${selectedVehicle.overMileFee}/
+        ${searchData.officeID.label}/
+        ${searchData.officeID.officeID}`);
+        // setIsReserving(true);
+        // const token = sessionStorage.getItem('token');
+        // const formData = {
+        //     vehicleID: selectedVehicle.vehicleID,
+        //     startTime: searchData.rentRange[0].format('YYYY-MM-DDTHH:MM:ss'),
+        //     endTime: searchData.rentRange[1].format('YYYY-MM-DDTHH:MM:ss'),
+        //     customerID: 0,
+        //     pickupAddressID: searchData.officeID.value,
+        //     dropoffAddressID: searchData.officeID.value
+        //
+        // }
+        // console.log(searchData);
+        // reserveVehicle(formData, token).then(res => {
+        //     message.success('Reserve Successfully');
+        //     handleCancel();
+        //     setIsReserving(false);
+        // }).catch(err => {
+        //     message.error('Reserve Failed');
+        //     setIsReserving(false);
+        //
+        // })
 
     }
     const {rentRange, officeID} = searchData;

@@ -10,6 +10,7 @@ const PaymentMethodSelection = ({handleChange}) => {
                     name="payment-method"
                     value="credit-card"
                     onChange={handleChange}
+                    defaultChecked={true}
                 />
                 <span>Credit Card</span>
                 <img src={"/SetOrder/credit-card-svgrepo-com.svg"} alt=""/>
@@ -30,6 +31,7 @@ const PaymentMethodSelection = ({handleChange}) => {
                     name="payment-method"
                     value="paypal"
                     onChange={handleChange}
+                    disabled={true}
                 />
                 <span>Paypal</span>
                 <img src={"/SetOrder/paypal-color-svgrepo-com.svg"} alt=""/>

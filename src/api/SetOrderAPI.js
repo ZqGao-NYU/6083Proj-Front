@@ -1,4 +1,4 @@
-import * as setOrderMock  from "mock/setOrderMock";
+import * as setOrderMock from "mock/setOrderMock";
 import axios from "axios";
 
 const useMock = process.env.REACT_APP_USE_MOCK_API === "true";
@@ -65,6 +65,46 @@ export const reserveVehicle = (formData, token) => {
             return Promise.resolve(response.data);
         }).catch(error => {
             console.log(error);
+            return Promise.reject(error);
+        });
+    }
+}
+
+export const validateCoupon = (couponCode) => {
+    if (useMock === true) {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve(setOrderMock.fetchCoupon);
+            }, 2000);
+        })
+    } else {
+        return api.get(`coupon/${couponCode}`).then(response => {
+            return Promise.resolve(response.data);
+        }).catch(error => {
+                return Promise.reject(error);
+            }
+        );
+    }
+}
+
+
+export const usualPayment = (formData, token) => {
+    if (useMock === true) {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve(setOrderMock.fetchUsualPayment);
+            }, 2000);
+        })
+    } else {
+        return api.post('payment', formData, {
+            baseURL: 'http://localhost:8080/api/v1/order/vehicle/payment',
+            headers: {
+                'Content-Type': 'application/json',
+                'Token': token
+            }
+        }).then(response => {
+            return Promise.resolve(response.data);
+        }).catch(error => {
             return Promise.reject(error);
         });
     }

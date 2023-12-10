@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Row, Col, Button,Card, Spin,message } from 'antd'; // Import Spin for loading indication
 import axios from 'axios';
+import "./Myorder.css"
 
 const MyOrder = () => {
     const navigate = useNavigate();
@@ -58,7 +59,7 @@ const MyOrder = () => {
     };
 
     return (
-        <Card title="Order List" style={{margin: 50,marginBottom:200,paddingBottom: 50}}>
+        <Card title={<div className="order-title">Order List</div>} style={{margin: 50,marginBottom:200,paddingBottom: 50}}>
             <Row gutter={[16, 16]} justify="center" style={{ marginTop: 50 }}>
                 {loading ? (
                     <Spin size="large" />
@@ -70,45 +71,33 @@ const MyOrder = () => {
                                     boxShadow: `0 4px 8px rgba(0, 0, 0, ${hoveredOrder === order.orderId ? '0.3' : '0.1'})`,
                                     borderRadius: '8px',
                                     transition: 'transform 0.3s, box-shadow 0.3s',
-                                    // width: "500px",
                                     transform: hoveredOrder === order.orderId ? 'scale(1.05)' : 'scale(1)',
                                 }}
                                 onMouseEnter={() => setHoveredOrder(order.orderId)}
                                 onMouseLeave={() => setHoveredOrder(null)}
                             >
-                                <Row gutter={[16, 16]} align="middle" style={{
-                                    height: 150,
-                                    overflow: 'hidden',
-                                    position: 'relative',
-                                    borderRadius: '8px',
-                                    display: 'flex',
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                }}>
+                                <Row gutter={[16, 16]} align="middle" className="order-row">
                                     <Col span={6}>
                                         <div
-                                            style={{
-                                                width: '90px',
-                                                height: '90px',
-                                            }}
+                                            style={{width: '150px', height: '150px'}}
                                         >
                                             <img
                                                 src={order.imgUrl}
                                                 alt="Order"
-                                                style={{
-                                                    width: '100%',
-                                                    height: '100%',
-                                                    objectFit: 'cover',
-                                                    borderRadius: '8px',
-                                                    marginLeft: '60px',
-                                                }}
+                                                className="order-image"
                                             />
                                         </div>
                                     </Col>
                                     <Col span={12}   onClick={() => handleDetail(order.orderId)}>
-                                        <p style={{ fontWeight: 1000, fontSize: 30 }}>{order.make} - {order.model}</p>
-                                        <p style={{marginTop: -30}}>{order.invoiceDate} <strong style={{color: "red",marginLeft: 20}}>${order.finalPrice}</strong></p>
-                                        <p ></p>
+                                        <p style={{marginTop: 0, fontWeight: 1000, fontSize: 30 }}>{order.make} - {order.model}</p>
+                                        <p style={{marginTop: -20}}>
+                                            <span className="order-label">Order Date: </span>
+                                            <span>{order.invoiceDate}</span>
+                                        </p>
+                                        <p style={{marginTop: -10}}>
+                                            <span className="order-label">Order Price: </span>
+                                            <span>${order.finalPrice}</span>
+                                        </p>
                                     </Col>
                                     <Col span={6} style={{ display: 'flex', justifyContent: 'flex-end' }}>
                                         <Button type="primary" style={{marginRight: 50}} onClick={() => handleReorder(order.orderId)}>

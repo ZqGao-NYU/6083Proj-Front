@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Card, Row, Col, Table,message } from 'antd';
-
 import axios from 'axios';
+import "./Myorder.css"
 const MyOrderDetail = () => {
     const { orderId } = useParams();
     const navigate = useNavigate();
@@ -44,34 +44,23 @@ const MyOrderDetail = () => {
     ;
 
     return (
-        <Card title="Order Detail" style={{ margin: 50, marginBottom: 200, paddingBottom: 50 }}>
+        <Card title="Order Detail" className="order-detail-title">
             <Row gutter={[16, 16]} justify="center">
                 <Col span={10}>
                     <Row>
-                        <Col span={8}>
-
+                        <Col span={7}>
                             {orderOne ? (
                                 <img
                                     src={orderOne.imgUrl}
                                     alt="Order"
-                                    style={{
-                                        width: '100px',
-                                        height: '100px',
-                                        objectFit: 'cover',
-                                        borderRadius: '8px',
-                                        marginLeft: '10px',
-                                    }}
+                                    className="order-detail-image"
                                 />
                             ) : (
                                 <p>Loading order details...</p>
                             )}
                         </Col>
-                        <Col span={16}>
-
+                        <Col span={16} className="order-detail-column">
                             <div>
-
-
-
                                 {orderOne ? (
                                     <div>
                                         <p><strong>Address:</strong>&nbsp;&nbsp;  {orderOne.address} </p>
@@ -87,15 +76,15 @@ const MyOrderDetail = () => {
                         </Col>
                     </Row>
                 </Col>
-                <Col span={7}>
+                <Col span={6} className="order-detail-column">
                     <div>
                         {orderTwo ? (
                             <div>
                                 <p><strong>Invoice Date:</strong>&nbsp;&nbsp;  {orderTwo.invoiceDate} </p>
-                                <p><strong>Total Amount:</strong> &nbsp;&nbsp; {orderTwo.originalPrice}</p>
-                                <p><strong>Corp Discount:</strong> &nbsp;&nbsp; {orderTwo.corpDiscount}</p>
-                                <p><strong>Coupon Discount:</strong>&nbsp;&nbsp; {orderTwo.couponDiscount} </p>
-                                <p><strong>Invoice Amount:</strong> &nbsp;&nbsp; {orderTwo.finalPrice}</p>
+                                <p><strong>Total Amount:</strong> &nbsp;&nbsp; ${orderTwo.originalPrice}</p>
+                                <p><strong>Corp Discount:</strong> &nbsp;&nbsp; ${orderTwo.corpDiscount}</p>
+                                <p><strong>Coupon Discount:</strong>&nbsp;&nbsp; ${orderTwo.couponDiscount} </p>
+                                <p><strong>Invoice Amount:</strong> &nbsp;&nbsp; ${orderTwo.finalPrice}</p>
                             </div>
                         ) : (
                             <p>Loading order details...</p>
@@ -106,11 +95,11 @@ const MyOrderDetail = () => {
                 <Col span={7}>
                     <div>
                         {orderThree ? (
-                            <div>
+                            <div style={{ paddingLeft: '20px'}}>
                                 <p><strong>Payment Method:</strong>&nbsp;&nbsp;  {orderThree.payMethod}</p>
                                 <p><strong>Card Number:</strong>&nbsp;&nbsp; {orderThree.cardNo} </p>
                                 <p><strong>Payment Date:</strong>&nbsp;&nbsp;  {orderThree.payDate}</p>
-                                <p><strong>Payment Amount:</strong>&nbsp;&nbsp; {orderThree.payAmount} </p>
+                                <p><strong>Payment Amount:</strong>&nbsp;&nbsp; ${orderThree.payAmount} </p>
                             </div>
 
                         ) : (

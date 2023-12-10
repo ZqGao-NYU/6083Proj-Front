@@ -41,7 +41,7 @@ function App() {
                     <Route path="/set-order" element={<SetOrder/>}/>
                     <Route path="/my-order" element={<MyOrder/>}/>
                     <Route path="/my-order-detail/:orderId" element={<MyOrderDetail/>}/>
-                    <Route path="/set-order/reserve-vehicle/check-out/:vehicleID/:startTime/:endTime/:totalPrice/:imgUrl/:make/:type/:dailyRate/:overMileFee/:officeLabel/:officeID"
+                    <Route path="/set-order/reserve-vehicle/check-out/:vehicleID/:startTime/:endTime/:totalPrice/:imgUrl/:make/:type/:dailyRate/:overMileFee/:officeLabel/:invoiceId"
                            element={<Checkout/>}/>
                 </Routes>
                 <Footer/>

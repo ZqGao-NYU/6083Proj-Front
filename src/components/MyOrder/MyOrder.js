@@ -50,6 +50,7 @@ const MyOrder = () => {
     }, []); // Empty dependency array means this effect runs once, similar to componentDidMount
 
     const handleDetail = (order) => {
+        console.log(order)
         navigate(`/my-order-detail/${order.orderId}`);
     };
 

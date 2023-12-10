@@ -1,15 +1,16 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {useParams} from "react-router-dom";
-import {Button, Divider, Flex, Form, Input, message} from "antd";
+import {Button, Divider, Flex, Form, Input, message, Tooltip} from "antd";
 import VehicleInfoCard from "./component/VehicleInfoCard";
 import dayjs from "dayjs";
 import PaymentMethodSelection from "./component/PaymentMethodSelection";
-import {usualPayment, validateCoupon} from "../../api/SetOrderAPI";
+import {cropPayment, tryToGetCorpInfo, usualPayment, validateCoupon} from "../../api/SetOrderAPI";
+import {ExclamationCircleOutlined} from "@ant-design/icons";
 
 const Checkout = () => {
     const {
         vehicleID, startTime, endTime, totalPrice,
-        imgUrl, make, type, dailyRate, overMileFee, officeLabel, officeID
+        imgUrl, make, type, dailyRate, overMileFee, officeLabel, invoiceId
     } = useParams();
     const vehicle = {
         vehicleID: vehicleID,
@@ -30,19 +31,26 @@ const Checkout = () => {
     const [couponCode, setCouponCode] = useState('');
     const [discount, setDiscount] = useState(0);
     const [isSettingCoupon, setIsSettingCoupon] = useState(false);
-    const [isUsingCustomerDiscount, setIsUsingCustomerDiscount] = useState(false);
+    const [isCorpCustomer, setIsCorpCustomer] = useState(false);
+    const [isUsingCorpDiscount, setIsUsingCorpDiscount] = useState(false);
     const [isSettingPayment, setIsSettingPayment] = useState(false);
+    const [isUsingCoupon, setIsUsingCoupon] = useState(false);
+    const [corpDiscount, setCorpDiscount] = useState(0);
+    const [payFinished, setPayFinished] = useState(false);
     const handleChange = (event) => {
         setPaymentMethod(event.target.value);
     };
+    const token = sessionStorage.getItem('token');
 
     function toValidateCoupon() {
         setIsSettingCoupon(true);
-        validateCoupon(couponCode).then(res => {
+        validateCoupon(couponCode, token).then(res => {
             message.success('Coupon Code Valid');
             setDiscount(res.data);
             setIsSettingCoupon(false);
-        }).catch(err => {
+            setIsUsingCoupon(true);
+            setIsUsingCorpDiscount(false);
+        }).catch(() => {
             message.error('Invalid Coupon Code or Expired');
             setIsSettingCoupon(false);
         });
@@ -50,15 +58,29 @@ const Checkout = () => {
 
     function toCheckOut() {
         setIsSettingPayment(true);
-        if (isUsingCustomerDiscount) {
-            // TODO: use customer discount
+        if (isUsingCorpDiscount) {
+            const res = {
+                ...form.getFieldsValue(),
+                payMethod: paymentMethod,
+                corpDiscount: corpDiscount,
+                invoiceId: invoiceId
+            }
+            console.log(res)
+            cropPayment(res, token).then(() => {
+                message.success('Payment Success');
+                setIsSettingPayment(false);
+            }).catch(err => {
+                message.error('Payment Failed');
+                setIsSettingPayment(false);
+            });
         } else {
             const res = {
                 ...form.getFieldsValue(),
                 payMethod: paymentMethod,
                 couponCode: couponCode,
+                invoiceId: invoiceId
             }
-            usualPayment(res).then(res => {
+            usualPayment(res, token).then(() => {
                 message.success('Payment Success');
                 // setIsSetting(false);
             }).catch(err => {
@@ -66,8 +88,28 @@ const Checkout = () => {
                 setIsSettingPayment(false);
             });
         }
+        setPayFinished(true);
 
 
+    }
+
+    useEffect(() => {
+        // Get customer type
+        tryToGetCorpInfo(token).then(res => {
+            setIsUsingCorpDiscount(true);
+            setDiscount(res.data.discount);
+            setIsCorpCustomer(true);
+            setCorpDiscount(res.data.discount);
+        }).catch(() => {
+            // User is not a corporate customer
+        })
+
+    }, [])
+
+    function resetCorpDiscount() {
+        setIsUsingCorpDiscount(true);
+        setIsUsingCoupon(false);
+        setDiscount(corpDiscount);
     }
 
     return (
@@ -95,7 +137,7 @@ const Checkout = () => {
                     </Form>
                 </div>
                 <div className="payment-vehicle-card">
-                    <Flex vertical={true}>
+                    <Flex vertical={true} style={{minHeight:'125vh'}}>
                         <VehicleInfoCard selectedVehicle={vehicle}/>
                         <Divider/>
                         <Flex vertical={true} gap="large">
@@ -112,31 +154,27 @@ const Checkout = () => {
                             </Flex>
                             <Flex>
                                 <Flex vertical={true} gap={"small"} align={"flex-start"} flex={3}>
-                                        <h2>Rental ({timeDiff} day)</h2>
+                                        <h3>Rental ({timeDiff} day)</h3>
                                         <Flex justify={"space-evenly"}>
-                                            <h3>Total Price</h3>
-                                            <h3>${totalPrice}</h3>
+                                            <h2>Total Price</h2>
+                                            <h2>${totalPrice}</h2>
                                         </Flex>
-                                        {discount > 0 && (
-                                            <>
-                                                <Flex justify={"space-evenly"}>
-                                                    <h3>Discount: </h3>
-                                                    <h3>${(totalPrice * (Number(discount)) / 100).toFixed(2)}</h3>
-                                                </Flex>
-                                                <Divider/>
-                                                <Flex>
-                                                    <h2>Final Price</h2>
-                                                    <h2>${(totalPrice * (1 - Number(discount) / 100)).toFixed(2)}</h2>
-                                                </Flex>
-                                            </>
 
-                                        )}
                                 </Flex>
 
                             </Flex>
+                            <Divider/>
+                            <Flex align={"center"}>
+                                <h2>Discount&Coupon</h2>
+                                {isCorpCustomer && (
+                                    <Tooltip title="Please note that you can't use both corporate discount and coupon discount at the same time.">
+                                        <ExclamationCircleOutlined/>
+                                    </Tooltip>
+                                    )
+                                }
+                            </Flex>
 
-                            <h2>Discount&Coupon</h2>
-                            <Flex justify={"space-evenly"}>
+                            <Flex gap={"large"}>
                                 <Input
                                     placeholder="Enter your coupon code"
                                     maxLength={9}
@@ -145,11 +183,31 @@ const Checkout = () => {
                                     value={couponCode}
                                     onChange={(e) => setCouponCode(e.target.value)}
                                 />
-                                <Button type="primary" onClick={toValidateCoupon} loading={isSettingCoupon}>Apply</Button>
+                                <Button type="primary" onClick={toValidateCoupon} loading={isSettingCoupon} disabled={payFinished}>Apply</Button>
+                                {isUsingCoupon && isCorpCustomer && (
+                                    <Button onClick={resetCorpDiscount}>Still want to use Corp Discount?</Button>
+                                )}
                             </Flex>
+                            {discount > 0 && (
+                                <>
+                                    <Divider/>
+                                    <Flex gap={"large"}>
+                                        <h3>Discount: </h3>
+                                        <h3>${(totalPrice * (Number(discount)) / 100).toFixed(2)}
+                                            {isUsingCorpDiscount && "(Corp)"}
+                                            {isUsingCoupon && "(Coupon)"}
+                                        </h3>
+                                    </Flex>
+                                    <Flex>
+                                        <h2>Final Price</h2>
+                                        <h2>${(totalPrice * (1 - Number(discount) / 100)).toFixed(2)}</h2>
+                                    </Flex>
+                                </>
+
+                            )}
                         </Flex>
                         <Divider/>
-                        <Button type="primary" size="large" block disabled={isSettingCoupon || isSettingPayment}
+                        <Button type="primary" size="large" disabled={isSettingCoupon || isSettingPayment || payFinished}
                                 onClick={toCheckOut} loading={isSettingPayment}>Checkout</Button>
 
                     </Flex>

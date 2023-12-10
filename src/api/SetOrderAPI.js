@@ -70,7 +70,7 @@ export const reserveVehicle = (formData, token) => {
     }
 }
 
-export const validateCoupon = (couponCode) => {
+export const validateCoupon = (couponCode, token) => {
     if (useMock === true) {
         return new Promise(resolve => {
             setTimeout(() => {
@@ -78,7 +78,13 @@ export const validateCoupon = (couponCode) => {
             }, 2000);
         })
     } else {
-        return api.get(`coupon/${couponCode}`).then(response => {
+        return api.post(`check-coupon?couponCode=${couponCode}`, couponCode, {
+            baseURL: 'http://localhost:8080/api/v1/order/vehicle',
+            headers: {
+                'Content-Type': 'application/json',
+                'Token': token
+            },
+        }).then(response => {
             return Promise.resolve(response.data);
         }).catch(error => {
                 return Promise.reject(error);
@@ -97,7 +103,53 @@ export const usualPayment = (formData, token) => {
         })
     } else {
         return api.post('payment', formData, {
-            baseURL: 'http://localhost:8080/api/v1/order/vehicle/payment',
+            baseURL: 'http://localhost:8080/api/v1/order/vehicle',
+            headers: {
+                'Content-Type': 'application/json',
+                'Token': token
+            }
+        }).then(response => {
+            return Promise.resolve(response.data);
+        }).catch(error => {
+            return Promise.reject(error);
+        });
+    }
+}
+
+export const tryToGetCorpInfo = (token) => {
+    if (useMock === true) {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve(setOrderMock.fetchCorpInfo);
+            }, 500);
+        })
+    } else {
+        return api.get('check-corp', {
+            baseURL: 'http://localhost:8080/api/v1/order/vehicle',
+            headers: {
+                'Content-Type': 'application/json',
+                'Token': token
+            }
+        }).then(response => {
+            console.log(response)
+            return Promise.resolve(response.data);
+        }).catch(error => {
+            return Promise.reject(error);
+        });
+    }
+}
+
+
+export const cropPayment = (formData, token) => {
+    if (useMock === true) {
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve(setOrderMock.fetchCorpPayment);
+            }, 2000);
+        })
+    } else {
+        return api.post('payment-corp', formData, {
+            baseURL: 'http://localhost:8080/api/v1/order/vehicle',
             headers: {
                 'Content-Type': 'application/json',
                 'Token': token

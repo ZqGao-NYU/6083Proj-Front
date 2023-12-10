@@ -222,7 +222,7 @@ const Register = () => {
                     <Form.Item
                         label="User Type"
                         name="userType"
-                        initialValue="1" // Default value (1 for personal user)
+                        initialValue="I" // Default value (1 for personal user)
                     >
                         <Radio.Group>
                             <Radio value="I">Personal User</Radio>

@@ -117,11 +117,11 @@ const Login = () => {
                         <Form.Item
                             label="User Type"
                             name="userType"
-                            initialValue="1" // Default value (1 for personal user)
+                            initialValue="I" // Default value (1 for personal user)
                         >
                             <Radio.Group>
-                                <Radio value="1">Personal User</Radio>
-                                <Radio value="2">Company User</Radio>
+                                <Radio value="I">Personal User</Radio>
+                                <Radio value="C">Company User</Radio>
                             </Radio.Group>
                         </Form.Item>
 

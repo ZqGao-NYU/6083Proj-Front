@@ -54,10 +54,6 @@ const NavBar = () => {
                     </Box><Button color="inherit" component={Link} to="/set-order">
                     SetOrder
                 </Button>
-
-                    <Button color="inherit" component={Link} to="/register">
-                        Register
-                    </Button>
                     {isLoggedIn ? (
                         <>
                             <Button color="inherit" component={Link} to="/my-order">
@@ -68,6 +64,9 @@ const NavBar = () => {
                             </Button></>
                     ) : (
                         <>
+                            <Button color="inherit" component={Link} to="/register">
+                                Register
+                            </Button>
                             <Button color="inherit" component={Link} to="/login">
                                 Login
                             </Button>

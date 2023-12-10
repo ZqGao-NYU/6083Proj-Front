@@ -53,7 +53,7 @@ const MyOrderDetail = () => {
         ${orderOne.dailyRate}/
         ${orderOne.overMileFee}/
         ${orderOne.address}/
-        ${orderOne.officeID}`);
+        ${orderTwo.invoiceId}`);
     }
 
     return (

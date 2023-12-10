@@ -1,3 +1,15 @@
+export let fetchCorpPayment = {
+    "code": 200,
+    "message": "success",
+};
+export let fetchCorpInfo = {
+    "code": 200,
+    "message": "success",
+    "data": {
+        "discount": 0.2,
+        "corporateDiscountId":1
+    }
+};
 export let fetchUsualPayment = {
     "code": 200,
     "message": "success",

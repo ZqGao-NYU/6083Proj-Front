@@ -49,13 +49,15 @@ const MyOrder = () => {
         fetchOrders();
     }, []); // Empty dependency array means this effect runs once, similar to componentDidMount
 
-    const handleDetail = (orderId) => {
-        navigate(`/my-order-detail/${orderId}`);
+    const handleDetail = (order) => {
+        navigate(`/my-order-detail/${order.orderId}`);
     };
 
     const handleReorder = () => {
         navigate('/set-order');
     };
+
+
 
     return (
         <Card title="Order List" style={{margin: 50,marginBottom:200,paddingBottom: 50}}>
@@ -105,13 +107,14 @@ const MyOrder = () => {
                                             />
                                         </div>
                                     </Col>
-                                    <Col span={12}   onClick={() => handleDetail(order.orderId)}>
+                                    <Col span={12}   onClick={() => handleDetail(order)}>
                                         <p style={{ fontWeight: 1000, fontSize: 30 }}>{order.make} - {order.model}</p>
-                                        <p style={{marginTop: -30}}>{order.invoiceDate} <strong style={{color: "red",marginLeft: 20}}>${order.finalPrice}</strong></p>
+                                        <p style={{marginTop: -30}}>Invoice Date: {order.invoiceDate}
+                                            <strong style={{marginLeft: 20, color: "purple"}}>Final Price: ${order.finalPrice}</strong></p>
                                         <p ></p>
                                     </Col>
                                     <Col span={6} style={{ display: 'flex', justifyContent: 'flex-end' }}>
-                                        <Button type="primary" style={{marginRight: 50}} onClick={() => handleReorder(order.orderId)}>
+                                        <Button type="primary" style={{marginRight: 50}} onClick={() => handleReorder(order)}>
                                             ReOrder
                                         </Button>
                                     </Col>

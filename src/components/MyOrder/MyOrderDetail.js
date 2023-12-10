@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Card, Row, Col, Table,message } from 'antd';
+import {Card, Row, Col, Table, message, Button} from 'antd';
 
 import axios from 'axios';
 const MyOrderDetail = () => {
-    const { orderId } = useParams();
+    const { orderId , make, type} = useParams();
     const navigate = useNavigate();
     const [orderOne, setOrderOne] = useState(null);
     const [orderTwo, setOrderTwo] = useState(null);
@@ -43,6 +43,19 @@ const MyOrderDetail = () => {
     }, [orderId]); // Run the effect when orderId changes
     ;
 
+    function toCheckout() {
+        navigate(`/set-order/reserve-vehicle/check-out/
+        ${orderOne.vehicleID}/${orderOne.pickupDate}/${orderOne.dropoffDate}/
+        ${orderTwo.originalPrice}/
+        ${encodeURIComponent(orderOne.imgUrl)}/
+        ${orderOne.make}/
+        ${orderOne.type}/
+        ${orderOne.dailyRate}/
+        ${orderOne.overMileFee}/
+        ${orderOne.address}/
+        ${orderOne.officeID}`);
+    }
+
     return (
         <Card title="Order Detail" style={{ margin: 50, marginBottom: 200, paddingBottom: 50 }}>
             <Row gutter={[16, 16]} justify="center">
@@ -76,9 +89,9 @@ const MyOrderDetail = () => {
                                     <div>
                                         <p><strong>Address:</strong>&nbsp;&nbsp;  {orderOne.address} </p>
                                         <p><strong>Pickup Date:</strong>&nbsp;&nbsp;  {orderOne.pickupDate}</p>
-                                        <p><strong>Start Odometer:</strong>&nbsp;&nbsp; {orderOne.startOdo} </p>
-                                        <p><strong>End Odometer:</strong> &nbsp;&nbsp; {orderOne.endOdo}</p>
-                                        <p><strong>Daily Odometer Limit:</strong> &nbsp;&nbsp; {orderOne.dailyOdoLimit}</p>
+                                        <p><strong>Start Odometer:</strong>&nbsp;&nbsp; {1445.6} </p>
+                                        <p><strong>End Odometer:</strong> &nbsp;&nbsp; {1610.3}</p>
+                                        <p><strong>Daily Odometer Limit:</strong> &nbsp;&nbsp;{500}</p>
                                     </div>
                                 ) : (
                                     <p>Loading order details...</p>
@@ -119,6 +132,9 @@ const MyOrderDetail = () => {
 
                     </div>
                 </Col>
+                <Button type="primary" style={{ marginLeft: 50, marginTop: 50 }} onClick={toCheckout}>
+                    Checkout
+                </Button>
             </Row>
         </Card>
     );

@@ -156,7 +156,7 @@ const Register = () => {
                                     type="primary"
                                     onClick={handleSendCode}
                                     disabled={isCountdownActive}
-                                    style={{ width: '100%', marginLeft: 35 }}
+                                    style={{ width: '100%', marginLeft: 55 }}
                                 >
                                     {isCountdownActive ? `${countdown}s` : 'Send Code'}
                                 </Button>
@@ -212,8 +212,8 @@ const Register = () => {
 
                     <Form.Item
                         name="addressZipCode"
-                        label="Address zipCode"
-                        rules={[{ required: true, message: 'Please input the Address zipCode!' }]}
+                        label="Address ZipCode"
+                        rules={[{ required: true, message: 'Please input the Address ZipCode!' }]}
                     >
                         <Input />
                     </Form.Item>

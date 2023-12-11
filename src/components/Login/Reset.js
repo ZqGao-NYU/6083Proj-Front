@@ -83,11 +83,19 @@ const Reset = () => {
             <Col span={8}>
                 {/* Left Column */}
                 <div>
-                    <h1 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>Your Large Text Title</h1>
+                    <h1 style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>World On Wheels</h1>
                     <p>
-                        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam ac urna eu felis dapibus
-                        condimentum id in libero. Vivamus a fringilla elit, eget fermentum massa. Proin eu
-                        ullamcorper erat, in fermentum justo.
+                        WOW (World On Wheels) is a car rental company.
+                    </p>
+                    <p>
+                        WOW Car Rental makes it a breeze to hit the road.
+                    </p>
+                    <p>
+                        Find us in cities, towns, and airports all over the U.S.
+                        for quick, easy,
+                    </p>
+                    <p>
+                        and friendly car rental services.
                     </p>
                 </div>
             </Col>

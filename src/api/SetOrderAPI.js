@@ -2,16 +2,15 @@ import * as setOrderMock from "mock/setOrderMock";
 import axios from "axios";
 
 const useMock = process.env.REACT_APP_USE_MOCK_API === "true";
+axios.defaults.baseURL = process.env.REACT_APP_API_URL;
 
 const api = axios.create({
-    baseURL: 'http://localhost:8080/api/v1/set-order',
     headers: {
         'Content-Type': 'application/json'
     }
 });
 
 export const submitVehicleSearch = (formData) => {
-    console.log(useMock);
     if (useMock === true) {
         return new Promise(resolve => {
             setTimeout(() => {
@@ -19,13 +18,14 @@ export const submitVehicleSearch = (formData) => {
             }, 1000);
         })
     } else {
-        return api.post(`vehicle/search?officeID=${formData.officeID}&startTime=${1}&endTime=${2}`, null).then(response => {
+        return api.post(`set-order/vehicle/search?officeID=${formData.officeID}&startTime=${1}&endTime=${2}`, null).then(response => {
             return response.data;
         });
     }
 }
 
 export const getOfficeList = () => {
+    console.log(axios.defaults.baseURL)
     if (useMock === true) {
         return new Promise(resolve => {
             setTimeout(() => {
@@ -33,7 +33,7 @@ export const getOfficeList = () => {
             }, 1000);
         })
     } else {
-        return api.get('office-list').then(response => {
+        return api.get('set-order/office-list').then(response => {
             return response.data;
         });
     }
@@ -53,9 +53,8 @@ export const reserveVehicle = (formData, token) => {
         })
     } else {
         console.log(token);
-        const url = `vehicle/reserve?vehicleID=${formData.vehicleID}&customerID=1&startDate=${encodeURIComponent(formData.startTime)}&endDate=${encodeURIComponent(formData.endTime)}&pickupAddressID=${formData.pickupAddressID}&dropoffAddressID=${formData.dropoffAddressID}`;
+        const url = `set-order/vehicle/reserve?vehicleID=${formData.vehicleID}&customerID=1&startDate=${encodeURIComponent(formData.startTime)}&endDate=${encodeURIComponent(formData.endTime)}&pickupAddressID=${formData.pickupAddressID}&dropoffAddressID=${formData.dropoffAddressID}`;
         return api.post(url, formData, {
-            baseURL: 'http://localhost:8080/api/v1/set-order',
             headers: {
                 'Content-Type': 'application/json',
                 'Token': token
@@ -78,8 +77,7 @@ export const validateCoupon = (couponCode, token) => {
             }, 2000);
         })
     } else {
-        return api.post(`check-coupon?couponCode=${couponCode}`, couponCode, {
-            baseURL: 'http://localhost:8080/api/v1/order/vehicle',
+        return api.post(`order/vehicle/check-coupon?couponCode=${couponCode}`, couponCode, {
             headers: {
                 'Content-Type': 'application/json',
                 'Token': token
@@ -102,8 +100,7 @@ export const usualPayment = (formData, token) => {
             }, 2000);
         })
     } else {
-        return api.post('payment', formData, {
-            baseURL: 'http://localhost:8080/api/v1/order/vehicle',
+        return api.post('order/vehicle/payment', formData, {
             headers: {
                 'Content-Type': 'application/json',
                 'Token': token
@@ -124,8 +121,7 @@ export const tryToGetCorpInfo = (token) => {
             }, 500);
         })
     } else {
-        return api.get('check-corp', {
-            baseURL: 'http://localhost:8080/api/v1/order/vehicle',
+        return api.get('order/vehicle/check-corp', {
             headers: {
                 'Content-Type': 'application/json',
                 'Token': token
@@ -148,8 +144,7 @@ export const cropPayment = (formData, token) => {
             }, 2000);
         })
     } else {
-        return api.post('payment-corp', formData, {
-            baseURL: 'http://localhost:8080/api/v1/order/vehicle',
+        return api.post('order/vehicle/payment-corp', formData, {
             headers: {
                 'Content-Type': 'application/json',
                 'Token': token

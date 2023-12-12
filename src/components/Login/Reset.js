@@ -11,7 +11,6 @@ const Reset = () => {
     const [isCountdownActive, setIsCountdownActive] = useState(false);
 
     const api = axios.create({
-        baseURL: 'http://localhost:8080/api/v1/user',
         headers: {
             'Content-Type': 'application/json'
         }
@@ -20,7 +19,7 @@ const Reset = () => {
     const onFinish = async (values) => {
         try {
             // TODO: Add axios post request to your backend endpoint
-            const response = await api.post('/reset', {
+            const response = await api.post('user/reset', {
                 email: values.email,
                 code: values.code,
                 newPassword: values.newPassword,
@@ -49,7 +48,7 @@ const Reset = () => {
             }
 
             // TODO: Add axios post request to send verification code
-            const response = await api.get('/reset/sendMsg?email=' + email);
+            const response = await api.get('user/reset/sendMsg?email=' + email);
 
             if
                 (response.data.code === 200) {

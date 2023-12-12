@@ -7,7 +7,6 @@ import './AuthForm.css';
 
 const Login = () => {
     const api = axios.create({
-        baseURL: 'http://localhost:8080/api/v1/user',
         headers: {
             'Content-Type': 'application/json'
         }
@@ -17,7 +16,7 @@ const Login = () => {
         try {
 
             // TODO: Add axios post request to your backend endpoint
-            const response = await api.post('/login', {
+            const response = await api.post('user/login', {
                 username: values.username,
                 password: values.password,
                 userType: values.userType,

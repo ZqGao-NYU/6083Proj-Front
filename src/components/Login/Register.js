@@ -11,7 +11,7 @@ const Register = () => {
     const [isCountdownActive, setIsCountdownActive] = useState(false);
     const onFinish = async (values) => {
         console.log('Received values of form: ', values);
-        const response = await api.post('/register', values)
+        const response = await api.post('user/register', values)
         if
             (response.data.code === 200) {
             // Handle successful response, e.g., show success message
@@ -26,7 +26,6 @@ const Register = () => {
     };
 
     const api = axios.create({
-        baseURL: 'http://localhost:8080/api/v1/user',
         headers: {
             'Content-Type': 'application/json'
         }
@@ -60,7 +59,7 @@ const Register = () => {
             }
 
             // TODO: Add axios post request to send verification code
-            const response = await api.get('/sendMsg?email=' + email);
+            const response = await api.get('user/sendMsg?email=' + email);
 
             if
                 (response.data.code === 200) {

@@ -10,7 +10,6 @@ const MyOrder = () => {
     const [loading, setLoading] = useState(true);
     const [hoveredOrder, setHoveredOrder] = useState(null);
     const api = axios.create({
-        baseURL: 'http://localhost:8080/api/v1/order',
         headers: {
             'Content-Type': 'application/json',
             'Token': sessionStorage.getItem('token')
@@ -21,7 +20,7 @@ const MyOrder = () => {
     useEffect(() => {
         const fetchOrders = async () => {
             try {
-                const response = await api.get('/orderList',{
+                const response = await api.get('order/orderList',{
                     headers: {
                         'Content-Type': 'application/json',
                         'Token': sessionStorage.getItem('token')

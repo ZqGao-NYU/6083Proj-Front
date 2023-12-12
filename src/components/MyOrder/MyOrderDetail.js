@@ -10,7 +10,6 @@ const MyOrderDetail = () => {
     const [orderTwo, setOrderTwo] = useState(null);
     const [orderThree, setOrderThree] = useState(null);
     const api = axios.create({
-        baseURL: 'http://localhost:8080/api/v1/order',
         headers: {
             'Content-Type': 'application/json',
             'Token': sessionStorage.getItem('token')
@@ -20,7 +19,7 @@ const MyOrderDetail = () => {
         const fetchOrderDetails = async () => {
             try {
                 // Make a request to your backend API with the orderId
-                const response = await api.get(`/detail/${orderId}`); // Update the API endpoint accordingly
+                const response = await api.get(`order/detail/${orderId}`); // Update the API endpoint accordingly
 
                 if
                 (response.data.code === 200) {
